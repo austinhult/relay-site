@@ -107,7 +107,7 @@
     <h1>Talk to it. It answers back.</h1>
     <p>Relay listens through your microphone, thinks with an AI model, and speaks its reply out loud — running entirely in this browser tab. Nothing to install, nothing to pay for.</p>
     <div class="boot-line">
-      <span>engine: <b>llama 3.3 70b (groq)</b></span>
+      <span>engine: <b>gpt-oss-120b (groq)</b></span>
       <span>input: <b>microphone</b></span>
       <span>output: <b>speech + log</b></span>
       <span>cost: <b>$0</b></span>
@@ -273,7 +273,7 @@ async function think(userText) {
         "Authorization": "Bearer " + GROQ_API_KEY
       },
       body: JSON.stringify({
-        model: "model: "openai/gpt-oss-120b",
+        model: "openai/gpt-oss-120b",
         max_tokens: 300,
         messages: [
           { role: "system", content: "You are Relay, a spoken voice assistant. Keep replies short, natural, and conversational — 1 to 3 sentences, since they will be read aloud. No markdown, no lists, no headers. Be direct and a little dry-witted, not overly chipper." },
