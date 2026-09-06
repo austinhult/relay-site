@@ -273,7 +273,7 @@ async function think(userText) {
         "Authorization": "Bearer " + GROQ_API_KEY
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "model: "openai/gpt-oss-120b",",
         max_tokens: 300,
         messages: [
           { role: "system", content: "You are Relay, a spoken voice assistant. Keep replies short, natural, and conversational — 1 to 3 sentences, since they will be read aloud. No markdown, no lists, no headers. Be direct and a little dry-witted, not overly chipper." },
