@@ -223,8 +223,9 @@ if (!SpeechRecognition) {
   };
 
   micBtn.addEventListener('click', () => {
-    if (isListening) { recognition.stop(); return; }
     if (isThinking) return;
+    if (isListening) { recognition.stop(); return; }
+    window.speechSynthesis.cancel();
     try { recognition.start(); } catch (err) {}
   });
 }
@@ -280,6 +281,19 @@ async function think(userText) {
         ]
       })
     });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Groq API error:', response.status, errText);
+      addLine('assistant', 'API error ' + response.status + ' — check the browser console for details.');
+      isThinking = false;
+      micBtn.classList.remove('thinking');
+      statusDot.classList.remove('live');
+      statusLine.textContent = 'idle';
+      micLabel.textContent = 'tap to talk';
+      return;
+    }
+
     const data = await response.json();
     const reply = data.choices && data.choices[0] ? data.choices[0].message.content : "I didn't catch a response that time.";
 
@@ -287,12 +301,13 @@ async function think(userText) {
     addLine('assistant', reply);
 
     if (voiceOn && 'speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(reply);
-      utter.rate = 1.02;
       window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utter);
+      const utter = new SpeechSynthesisUtterance(reply);
+      utter.rate = 1.0;
+      setTimeout(() => window.speechSynthesis.speak(utter), 50);
     }
   } catch (err) {
+    console.error('Fetch failed:', err);
     addLine('assistant', 'Something broke on my end reaching the model.');
   }
 
